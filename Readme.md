@@ -2,7 +2,7 @@
 
 > WARNING: This module is still in early development.
 
-A simple module to control a ws2801 ledstripe with a pi via SPI.
+A simple module to control a ws2801 led strip with a pi via SPI.
 
 ## Installation
 
@@ -14,9 +14,9 @@ A simple module to control a ws2801 ledstripe with a pi via SPI.
 ```javascript
 const LedController = require('ws2801-pi');
 
-const amountOfLedsOnStripe = 100;
+const amountOfLedsOnStrip = 100;
 
-const ledController = new LedController(amountOfLedsOnStripe);
+const ledController = new LedController(amountOfLedsOnStrip);
 
 let red = 255;
 let green = 120;
@@ -44,9 +44,9 @@ ledController
 ```javascript
 const LedController = require('ws2801-pi');
 
-const amountOfLedsOnStripe = 100;
+const amountOfLedsOnStrip = 100;
 
-const ledController = new LedController(amountOfLedsOnStripe);
+const ledController = new LedController(amountOfLedsOnStrip);
 
 async function wait(ms) {
   return new Promise((resolve) => {
