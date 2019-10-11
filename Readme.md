@@ -91,9 +91,10 @@ animate();
 
 ### v0.0.2
 
-- 📝 Improve Readme
+- 📝 **Add Wiring Section**
+- 📝 Add Changelog Section
 - ✏️ Fix Typo
 
 ### v0.0.1
 
-- ✨ Add Basic LedController
+- ✨ **Add Basic LedController**
