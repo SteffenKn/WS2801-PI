@@ -83,3 +83,14 @@ async function animate() {
 }
 animate();
 ```
+
+## Changelog
+
+### v0.0.2
+
+- 📝 Improve Readme
+- ✏️ Fix Typo
+
+### v0.0.1
+
+- ✨ Add Basic LedController
