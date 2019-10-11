@@ -69,7 +69,7 @@ async function wait(ms) {
 
 async function animate() {
   for (let color = 0; color < 4; color++) {
-    for (let ledIndex = 0; ledIndex < LED_AMOUNT; ledIndex++) {
+    for (let ledIndex = 0; ledIndex < amountOfLedsOnStrip; ledIndex++) {
       const red = color === 0 ? 255 : 0;
       const green = color === 1 ? 255 : 0;
       const blue = color === 2 ? 255 : 0;
