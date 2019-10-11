@@ -25,7 +25,7 @@ module.exports = class LedController {
     for(let ledIndex = 0; ledIndex < this.ledAmount; ledIndex++) {
       this.setLed(ledIndex, red, green, blue);
     }
- 
+
     return this;
   }
 
