@@ -7,22 +7,22 @@ module.exports = class LedController {
     this.spi.clockSpeed(2e6);
 
     this.ledAmount = ledAmount;
-    this.buffer = Buffer.alloc(LED_AMOUNT * 3);
+    this.buffer = Buffer.alloc(this.ledAmount * 3);
   }
 
   setLed(led, red, green, blue) {
     const ledIndex = led * 3;
 
-    buffer[ledIndex] = red;
-    buffer[ledIndex + 1] = green;
-    buffer[ledIndex + 2] = blue;
+    this.buffer[ledIndex] = red;
+    this.buffer[ledIndex + 1] = green;
+    this.buffer[ledIndex + 2] = blue;
 
     return this;
   }
 
 
   fillLeds(red, green, blue) {
-    for(let ledIndex = 0; ledIndex < LED_AMOUNT; ledIndex++) {
+    for(let ledIndex = 0; ledIndex < this.ledAmount; ledIndex++) {
       this.setLed(ledIndex, red, green, blue);
     }
  
@@ -37,7 +37,7 @@ module.exports = class LedController {
 
   show() {
     return new Promise((resolve) => {
-      spi.write(buffer, resolve);
+      this.spi.write(this.buffer, resolve);
     });
   }
 }
