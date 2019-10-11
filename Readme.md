@@ -22,6 +22,7 @@ let red = 255;
 let green = 120;
 let blue = 0;
 
+// Set color of whole led strip
 ledController.fillLeds(red, green, blue);
 ledController.show();
 
@@ -29,9 +30,11 @@ red = 0;
 green = 0;
 blue = 255;
 
+// Set color of single led
 ledController.setLed(0, red, green, blue);
 ledController.show();
 
+// Clear led strip (turn all leds off)
 ledController
   .clearLeds()
   .show();
