@@ -39,6 +39,16 @@ ledController
 
 > Hint: Make sure to call show() after changing leds in order to physically change the led.
 
+## Wiring
+
+| Raspberry Pi | led strip |
+|:------------:|:----------:|
+| GND | GND |
+| SCLK | Clock |
+| MOSI | Data |
+
+> You should connect the GND and the V+ of the led strip to an external power supply.
+
 ## Example Animation
 
 ```javascript
