@@ -89,6 +89,12 @@ animate();
 
 ## Changelog
 
+### v0.0.3
+
+- 🐛 **Fix LedController**
+- 🐛 **Fix Example Animation**
+- 📝 Add Comments to Usage
+
 ### v0.0.2
 
 - 📝 **Add Wiring Section**
