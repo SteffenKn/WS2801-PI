@@ -9,7 +9,8 @@ module.exports = class LedController {
     this.ledAmount = ledAmount;
 
     this.buffer = Buffer.alloc(this.ledAmount * 3);
-    this.ledstrip = [];
+    this.undisplayedLedstrip = [];
+    this.displayedLedstrip = [];
 
     this.clearLeds().show();
   }
@@ -17,11 +18,12 @@ module.exports = class LedController {
   setLed(led, red, green, blue) {
     const ledIndex = led * 3;
 
-    this.ledstrip[led] = {
+    this.undisplayedLedstrip[led] = {
       red: red,
       green: green,
       blue: blue,
     };
+
     this.buffer[ledIndex] = red;
     this.buffer[ledIndex + 1] = green;
     this.buffer[ledIndex + 2] = blue;
@@ -49,6 +51,8 @@ module.exports = class LedController {
   }
 
   show() {
+    this.displayedLedstrip = this.undisplayedLedstrip;
+
     return new Promise((resolve) => {
       this.spi.write(this.buffer, resolve);
     });
