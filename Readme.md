@@ -89,6 +89,10 @@ animate();
 
 ## Changelog
 
+### v0.0.4
+
+- ✨ **Add getLeds Functionality**
+
 ### v0.0.3
 
 - 🐛 **Fix LedController**
