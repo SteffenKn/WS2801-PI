@@ -7,12 +7,21 @@ module.exports = class LedController {
     this.spi.clockSpeed(2e6);
 
     this.ledAmount = ledAmount;
+
     this.buffer = Buffer.alloc(this.ledAmount * 3);
+    this.ledstrip = [];
+
+    this.clearLeds().show();
   }
 
   setLed(led, red, green, blue) {
     const ledIndex = led * 3;
 
+    this.ledstrip[led] = {
+      red: red,
+      green: green,
+      blue: blue,
+    };
     this.buffer[ledIndex] = red;
     this.buffer[ledIndex + 1] = green;
     this.buffer[ledIndex + 2] = blue;
@@ -27,6 +36,10 @@ module.exports = class LedController {
     }
 
     return this;
+  }
+
+  getLedstrip() {
+    return this.ledstrip;
   }
 
   clearLeds() {
