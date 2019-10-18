@@ -89,6 +89,10 @@ animate();
 
 ## Changelog
 
+### v0.0.7
+
+- ✨ **Block Updating Ledstrip After Updating for a Short Duration**
+
 ### v0.0.6
 
 - 🐛 **Fix Typo**
