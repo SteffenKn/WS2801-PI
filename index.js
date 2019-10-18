@@ -51,10 +51,24 @@ module.exports = class LedController {
   }
 
   show() {
+    if (this.showIsBlocked) {
+      return;
+    }
+
+    this.showIsBlocked = true;
+
     this.displayedLedstrip = this.undisplayedLedstrip;
 
     return new Promise((resolve) => {
-      this.spi.write(this.buffer, resolve);
+      const doneWriting = () => {
+        setTimeout(() => {
+          this.showIsBlocked = false;
+        }, 10);
+
+        resolve();
+      }
+
+      this.spi.write(this.buffer, doneWriting);
     });
   }
 }
