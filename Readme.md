@@ -89,6 +89,10 @@ animate();
 
 ## Changelog
 
+### v0.0.6
+
+- 🐛 **Fix Typo**
+
 ### v0.0.5
 
 - ♻️ **Improve getLeds Functionality**
