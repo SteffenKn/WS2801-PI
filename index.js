@@ -41,7 +41,7 @@ module.exports = class LedController {
   }
 
   getLedstrip() {
-    return this.ledstrip;
+    return this.displayedLedstrip;
   }
 
   clearLeds() {
