@@ -52,6 +52,7 @@ module.exports = class LedController {
 
   show() {
     if (this.showIsBlocked) {
+      this.rerenderWhenDone = true;
       return;
     }
 
@@ -63,6 +64,12 @@ module.exports = class LedController {
       const doneWriting = () => {
         setTimeout(() => {
           this.showIsBlocked = false;
+
+          if(this.rerenderWhenDone) {
+            this.rerenderWhenDone = false;
+
+            this.show();
+          }
         }, 10);
 
         resolve();
