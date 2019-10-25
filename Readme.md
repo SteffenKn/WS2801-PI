@@ -89,6 +89,10 @@ animate();
 
 ## Changelog
 
+### v0.0.8
+
+- ✨ **Add Rerender Mechanism**
+
 ### v0.0.7
 
 - ✨ **Block Updating Ledstrip After Updating for a Short Duration**
