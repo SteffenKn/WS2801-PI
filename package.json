@@ -5,6 +5,9 @@
   "main": "index.js",
   "author": "Steffen Knaup <steffenknaup@hotmail.de>",
   "license": "MIT",
+  "scripts": {
+    "build": "tsc"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SteffenKn/WS2801-PI.git"
@@ -15,5 +18,10 @@
   "homepage": "https://github.com/SteffenKn/WS2801-PI#readme",
   "dependencies": {
     "pi-spi": "1.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^13.7.2",
+    "@types/pi-spi": "0.0.28",
+    "typescript": "^3.7.5"
   }
 }
