@@ -1,10 +1,10 @@
-import * as PiSpi from "pi-spi";
+import * as PiSpi from 'pi-spi';
 
 export type LedColor = {
   red: number,
   blue: number,
   green: number,
-}
+};
 
 export type Ledstrip = Array<LedColor>;
 
@@ -23,12 +23,12 @@ export default class LedController {
 
   private debug: boolean;
 
-  constructor(ledAmount: number, debug = false) {
+  constructor(ledAmount: number, debug: boolean = false) {
     this.ledAmount = ledAmount;
     this.debug = debug;
 
     if (!this.debug) {
-      this.spi = PiSpi.initialize("/dev/spidev0.0");
+      this.spi = PiSpi.initialize('/dev/spidev0.0');
       this.spi.clockSpeed(2e6);
     }
 
@@ -38,7 +38,7 @@ export default class LedController {
   }
 
   public setLed(led: number, red: number, green: number, blue: number): LedController {
-    const ledIndex = led * 3;
+    const ledIndex: number = led * 3;
 
     this.undisplayedLedstrip[led] = {
       red: red,
@@ -53,9 +53,8 @@ export default class LedController {
     return this;
   }
 
-
   public fillLeds(red: number, green: number, blue: number): LedController {
-    for(let ledIndex = 0; ledIndex < this.ledAmount; ledIndex++) {
+    for (let ledIndex: number = 0; ledIndex < this.ledAmount; ledIndex++) {
       this.setLed(ledIndex, red, green, blue);
     }
 
@@ -76,7 +75,7 @@ export default class LedController {
     if (this.renderingIsBlocked) {
       this.shouldRerenderWhenDone = true;
 
-      const isAlreadyWaitingForRerendering = this.rerenderPromise !== undefined;
+      const isAlreadyWaitingForRerendering: boolean = this.rerenderPromise !== undefined;
       if (isAlreadyWaitingForRerendering) {
         return this.rerenderPromise;
       }
@@ -90,20 +89,20 @@ export default class LedController {
 
     this.displayedLedstrip = this.undisplayedLedstrip;
 
-    return new Promise((resolve) => {
-      const doneWriting = async(): Promise<void> => {
+    return new Promise((resolve: Function): void => {
+      const doneWriting: (error?: Error, data?: Buffer) => Promise<void> = async(): Promise<void> => {
         resolve();
 
         await this.wait(10);
 
         this.renderingIsBlocked = false;
 
-        if(this.shouldRerenderWhenDone) {
+        if (this.shouldRerenderWhenDone) {
           this.shouldRerenderWhenDone = false;
 
           this.rerender();
         }
-      }
+      };
 
       if (this.debug) {
         doneWriting();
@@ -126,7 +125,7 @@ export default class LedController {
 
   private wait(ms: number): Promise<void> {
     return new Promise((resolve: Function): void => {
-      setTimeout(() => {
+      setTimeout((): void => {
         resolve();
       }, ms);
     });
