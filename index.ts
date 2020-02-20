@@ -75,7 +75,7 @@ export default class LedController {
       this.shouldRerenderWhenDone = true;
 
       const isAlreadyWaitingForRerendering = this.rerenderPromise !== undefined;
-      if(isAlreadyWaitingForRerendering) {
+      if (isAlreadyWaitingForRerendering) {
         return this.rerenderPromise;
       }
 
@@ -103,7 +103,7 @@ export default class LedController {
         }
       }
 
-      if(this.debug) {
+      if (this.debug) {
         doneWriting();
 
         return;
