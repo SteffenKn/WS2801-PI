@@ -89,6 +89,12 @@ animate();
 
 ## Changelog
 
+### v0.0.9
+
+- ♻️ **Rewrite Code in TypeScript**
+- 🐛 **Fix Awaiting Show if Rerendering Needed**
+- ✅ Add Tests
+
 ### v0.0.8
 
 - ✨ **Add Rerender Mechanism**
