@@ -12,7 +12,8 @@ A simple module to control a ws2801 led strip with a pi via SPI.
 ## Usage
 
 ```javascript
-const LedController = require('ws2801-pi');
+import LedController from 'ws2801-pi';
+// const LedController = require('ws2801-pi').default;
 
 const amountOfLedsOnStrip = 100;
 
@@ -55,7 +56,8 @@ ledController
 ## Example Animation
 
 ```javascript
-const LedController = require('ws2801-pi');
+import LedController from 'ws2801-pi';
+// const LedController = require('ws2801-pi').default;
 
 const amountOfLedsOnStrip = 100;
 
