@@ -6,13 +6,15 @@ export type LedColor = {
   green: number,
 }
 
+export type Ledstrip = Array<LedColor>;
+
 export default class LedController {
   private spi: PiSpi.SPI;
 
   private ledAmount: number;
   private ledstripBuffer: Buffer;
-  private undisplayedLedstrip: Array<LedColor> = [];
-  private displayedLedstrip: Array<LedColor> = [];
+  private undisplayedLedstrip: Ledstrip = [];
+  private displayedLedstrip: Ledstrip = [];
 
   private renderingIsBlocked: boolean = false;
   private shouldRerenderWhenDone: boolean = false;
@@ -60,7 +62,7 @@ export default class LedController {
     return this;
   }
 
-  public getLedstrip(): Array<LedColor> {
+  public getLedstrip(): Ledstrip {
     return this.displayedLedstrip;
   }
 
