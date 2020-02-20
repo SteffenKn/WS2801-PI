@@ -16,6 +16,8 @@ export default class LedController {
 
   private renderingIsBlocked: boolean = false;
   private shouldRerenderWhenDone: boolean = false;
+  private rerenderPromise: Promise<void> | undefined;
+  private rerenderPromiseResolveFn: Function | undefined;
 
   private debug: boolean;
 
@@ -71,7 +73,15 @@ export default class LedController {
   public show(): Promise<void> {
     if (this.renderingIsBlocked) {
       this.shouldRerenderWhenDone = true;
-      return new Promise((resolve) => resolve());
+
+      const isAlreadyWaitingForRerendering = this.rerenderPromise !== undefined;
+      if(isAlreadyWaitingForRerendering) {
+        return this.rerenderPromise;
+      }
+
+      this.rerenderPromise = new Promise((resolve: Function): void => {
+        this.rerenderPromiseResolveFn = resolve;
+      });
     }
 
     this.renderingIsBlocked = true;
@@ -79,18 +89,18 @@ export default class LedController {
     this.displayedLedstrip = this.undisplayedLedstrip;
 
     return new Promise((resolve) => {
-      const doneWriting = () => {
-        setTimeout(() => {
-          this.renderingIsBlocked = false;
-
-          if(this.shouldRerenderWhenDone) {
-            this.shouldRerenderWhenDone = false;
-
-            this.show();
-          }
-        }, 10);
-
+      const doneWriting = async(): Promise<void> => {
         resolve();
+
+        await this.wait(10);
+
+        this.renderingIsBlocked = false;
+
+        if(this.shouldRerenderWhenDone) {
+          this.shouldRerenderWhenDone = false;
+
+          this.rerender();
+        }
       }
 
       if(this.debug) {
@@ -100,6 +110,23 @@ export default class LedController {
       }
 
       this.spi.write(this.ledstripBuffer, doneWriting);
+    });
+  }
+
+  private async rerender(): Promise<void> {
+    await this.show();
+
+    this.rerenderPromiseResolveFn();
+
+    this.rerenderPromise = undefined;
+    this.rerenderPromiseResolveFn = undefined;
+  }
+
+  private wait(ms: number): Promise<void> {
+    return new Promise((resolve: Function): void => {
+      setTimeout(() => {
+        resolve();
+      }, ms);
     });
   }
 }
