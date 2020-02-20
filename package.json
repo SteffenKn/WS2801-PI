@@ -6,7 +6,12 @@
   "author": "Steffen Knaup <steffenknaup@hotmail.de>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc"
+    "build": "npm run build:package && npm run build:tests",
+    "build:package": "tsc",
+    "build:tests": "tsc --p tests/ts",
+    "test": "npm run test:js && npm run test:ts",
+    "test:js": "mocha tests/js/tests.js --timeout 15000 --exit",
+    "test:ts": "mocha tests/ts/tests.js --timeout 15000 --exit"
   },
   "repository": {
     "type": "git",
