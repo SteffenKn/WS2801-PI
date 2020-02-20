@@ -20,8 +20,11 @@
     "pi-spi": "1.2.1"
   },
   "devDependencies": {
+    "@types/mocha": "^7.0.1",
     "@types/node": "^13.7.2",
     "@types/pi-spi": "0.0.28",
+    "chai": "^4.2.0",
+    "mocha": "^7.0.1",
     "typescript": "^3.7.5"
   }
 }
