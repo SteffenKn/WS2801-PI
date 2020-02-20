@@ -17,11 +17,16 @@ export default class LedController {
   private renderingIsBlocked: boolean = false;
   private shouldRerenderWhenDone: boolean = false;
 
-  constructor(ledAmount: number) {
-    this.ledAmount = ledAmount;
+  private debug: boolean;
 
-    this.spi = PiSpi.initialize("/dev/spidev0.0");
-    this.spi.clockSpeed(2e6);
+  constructor(ledAmount: number, debug = false) {
+    this.ledAmount = ledAmount;
+    this.debug = debug;
+
+    if (!this.debug) {
+      this.spi = PiSpi.initialize("/dev/spidev0.0");
+      this.spi.clockSpeed(2e6);
+    }
 
     this.ledstripBuffer = Buffer.alloc(this.ledAmount * 3);
 
@@ -86,6 +91,12 @@ export default class LedController {
         }, 10);
 
         resolve();
+      }
+
+      if(this.debug) {
+        doneWriting();
+
+        return;
       }
 
       this.spi.write(this.ledstripBuffer, doneWriting);
