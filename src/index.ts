@@ -17,6 +17,8 @@ export type Ws2801PiConfig = {
 export type Ledstrip = Array<LedColor>;
 
 export default class LedController {
+  public renderPromise: Promise<void>;
+
   private spi: PiSpi.SPI;
 
   private ledAmount: number;
@@ -89,7 +91,7 @@ export default class LedController {
   }
 
   public show(): Promise<void> {
-    return lock.acquire('show', async(done: Function): Promise<void> => {
+    this.renderPromise = lock.acquire('show', async(done: Function): Promise<void> => {
 
       const doneWriting: (error?: Error, data?: Buffer) => Promise<void> = async(): Promise<void> => {
         this.displayedLedstrip = this.undisplayedLedstrip;
@@ -107,5 +109,7 @@ export default class LedController {
 
       this.spi.write(this.ledstripBuffer, doneWriting);
     });
+
+    return this.renderPromise;
   }
 }
