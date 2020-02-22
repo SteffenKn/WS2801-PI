@@ -23,9 +23,11 @@
   },
   "homepage": "https://github.com/SteffenKn/WS2801-PI#readme",
   "dependencies": {
+    "async-lock": "^1.2.2",
     "pi-spi": "1.2.1"
   },
   "devDependencies": {
+    "@types/async-lock": "^1.1.1",
     "@types/mocha": "^7.0.1",
     "@types/node": "^13.7.2",
     "@types/pi-spi": "0.0.28",

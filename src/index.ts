@@ -1,4 +1,7 @@
+import AsyncLock from 'async-lock';
 import * as PiSpi from 'pi-spi';
+
+const lock: AsyncLock = new AsyncLock();
 
 export type LedColor = {
   red: number,
@@ -15,11 +18,6 @@ export default class LedController {
   private ledstripBuffer: Buffer;
   private undisplayedLedstrip: Ledstrip = [];
   private displayedLedstrip: Ledstrip = [];
-
-  private renderingIsBlocked: boolean = false;
-  private shouldRerenderWhenDone: boolean = false;
-  private rerenderPromise: Promise<void> | undefined;
-  private rerenderPromiseResolveFn: Function | undefined;
 
   private debug: boolean;
 
@@ -72,40 +70,18 @@ export default class LedController {
   }
 
   public show(): Promise<void> {
-    if (this.renderingIsBlocked) {
-      this.shouldRerenderWhenDone = true;
+    return lock.acquire('show', async(done: Function): Promise<void> => {
 
-      const isAlreadyWaitingForRerendering: boolean = this.rerenderPromise !== undefined;
-      if (isAlreadyWaitingForRerendering) {
-        return this.rerenderPromise;
-      }
-
-      this.rerenderPromise = new Promise((resolve: Function): void => {
-        this.rerenderPromiseResolveFn = resolve;
-      });
-    }
-
-    this.renderingIsBlocked = true;
-
-    this.displayedLedstrip = this.undisplayedLedstrip;
-
-    return new Promise((resolve: Function): void => {
       const doneWriting: (error?: Error, data?: Buffer) => Promise<void> = async(): Promise<void> => {
-        resolve();
-
         await this.wait(10);
 
-        this.renderingIsBlocked = false;
+        this.displayedLedstrip = this.undisplayedLedstrip;
 
-        if (this.shouldRerenderWhenDone) {
-          this.shouldRerenderWhenDone = false;
-
-          this.rerender();
-        }
+        done();
       };
 
       if (this.debug) {
-        setTimeout(() => {
+        setTimeout((): void => {
           doneWriting();
         }, 60);
 
@@ -114,15 +90,6 @@ export default class LedController {
 
       this.spi.write(this.ledstripBuffer, doneWriting);
     });
-  }
-
-  private async rerender(): Promise<void> {
-    await this.show();
-
-    this.rerenderPromiseResolveFn();
-
-    this.rerenderPromise = undefined;
-    this.rerenderPromiseResolveFn = undefined;
   }
 
   private wait(ms: number): Promise<void> {
