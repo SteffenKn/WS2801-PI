@@ -99,4 +99,42 @@ describe ('LedController', () => {
 
     await ledController.clearLeds().show();
   });
+
+  it ('should be able to handle multiple changes at the same time', async() => {
+    const ledColor: LedColor = {
+      red: 255,
+      green: 155,
+      blue: 55,
+    };
+
+    await new Promise((resolve: Function): void => {
+      const unfillInterval: NodeJS.Timeout = setInterval(async(): Promise<void> => {
+        await ledController.fillLeds(0, 0, 0).show();
+      }, 100);
+
+      const fillInterval: NodeJS.Timeout = setInterval(async(): Promise<void> => {
+        await ledController.fillLeds(ledColor.red, ledColor.green, ledColor.blue).show();
+      }, 100);
+
+      const fillAgainInterval: NodeJS.Timeout = setInterval(async(): Promise<void> => {
+        await ledController.fillLeds(ledColor.red, ledColor.green, ledColor.blue).show();
+      }, 100);
+
+      setTimeout((): void => {
+        clearInterval(unfillInterval);
+        clearInterval(fillInterval);
+        clearInterval(fillAgainInterval);
+
+        resolve();
+      }, 1050);
+    });
+
+    const ledstrip: Ledstrip = ledController.getLedstrip();
+
+    expect(ledstrip[5].red).to.equal(ledColor.red);
+    expect(ledstrip[5].green).to.equal(ledColor.green);
+    expect(ledstrip[5].blue).to.equal(ledColor.blue);
+
+    await ledController.clearLeds().show();
+  });
 });
