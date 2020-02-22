@@ -20,7 +20,7 @@ describe ('LedController', () => {
   it ('should be able to get the ledstrip"', () => {
     const ledstrip = ledController.getLedstrip();
 
-    for(const led of ledstrip) {
+    for (const led of ledstrip) {
       expect(led.red).to.equal(0);
       expect(led.green).to.equal(0);
       expect(led.blue).to.equal(0);
@@ -36,7 +36,7 @@ describe ('LedController', () => {
 
     await ledController.fillLeds(expectedLed.red, expectedLed.green, expectedLed.blue).show();
 
-    for(const led of ledController.getLedstrip()) {
+    for (const led of ledController.getLedstrip()) {
       expect(led.red).to.equal(expectedLed.red);
       expect(led.green).to.equal(expectedLed.green);
       expect(led.blue).to.equal(expectedLed.blue);
@@ -54,7 +54,7 @@ describe ('LedController', () => {
 
     await ledController.fillLeds(expectedLed.red, expectedLed.green, expectedLed.blue).show();
 
-    for(const led of ledController.getLedstrip()) {
+    for (const led of ledController.getLedstrip()) {
       expect(led.red).to.equal(expectedLed.red);
       expect(led.green).to.equal(expectedLed.green);
       expect(led.blue).to.equal(expectedLed.blue);
@@ -62,7 +62,7 @@ describe ('LedController', () => {
 
     await ledController.clearLeds().show();
 
-    for(const led of ledController.getLedstrip()) {
+    for (const led of ledController.getLedstrip()) {
       expect(led.red).to.equal(0);
       expect(led.green).to.equal(0);
       expect(led.blue).to.equal(0);
@@ -84,8 +84,8 @@ describe ('LedController', () => {
     const blankLeds = ledstrip.slice();
     blankLeds.splice(indexOfExpectedLed, 1);
 
-    for(let index = 0; index < blankLeds.length; index++) {
-      if(index === indexOfExpectedLed) {
+    for (let index = 0; index < blankLeds.length; index++) {
+      if (index === indexOfExpectedLed) {
         continue;
       }
 
