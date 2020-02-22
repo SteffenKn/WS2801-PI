@@ -73,8 +73,6 @@ export default class LedController {
     return lock.acquire('show', async(done: Function): Promise<void> => {
 
       const doneWriting: (error?: Error, data?: Buffer) => Promise<void> = async(): Promise<void> => {
-        await this.wait(10);
-
         this.displayedLedstrip = this.undisplayedLedstrip;
 
         done();
@@ -89,14 +87,6 @@ export default class LedController {
       }
 
       this.spi.write(this.ledstripBuffer, doneWriting);
-    });
-  }
-
-  private wait(ms: number): Promise<void> {
-    return new Promise((resolve: Function): void => {
-      setTimeout((): void => {
-        resolve();
-      }, ms);
     });
   }
 }
