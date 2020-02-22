@@ -1,13 +1,13 @@
 import chai from 'chai';
 
-import LedController, {Ledstrip, LedColor} from '../../dist/index';
+import LedController, {LedColor, Ledstrip} from '../../dist/index';
 
 const expect: chai.ExpectStatic = chai.expect;
 
 let ledController: LedController;
 
 describe ('LedController', () => {
-  afterEach (async () => {
+  afterEach (async() => {
     await ledController.clearLeds().show();
   });
 
@@ -20,14 +20,14 @@ describe ('LedController', () => {
   it ('should be able to get the ledstrip"', () => {
     const ledstrip: Ledstrip = ledController.getLedstrip();
 
-    for(const led of ledstrip) {
+    for (const led of ledstrip) {
       expect(led.red).to.equal(0);
       expect(led.green).to.equal(0);
       expect(led.blue).to.equal(0);
     }
   });
 
-  it ('should be able to fill the ledstrip"', async () => {
+  it ('should be able to fill the ledstrip"', async() => {
     const expectedLed: LedColor = {
       red: 255,
       green: 155,
@@ -36,7 +36,7 @@ describe ('LedController', () => {
 
     await ledController.fillLeds(expectedLed.red, expectedLed.green, expectedLed.blue).show();
 
-    for(const led of ledController.getLedstrip()) {
+    for (const led of ledController.getLedstrip()) {
       expect(led.red).to.equal(expectedLed.red);
       expect(led.green).to.equal(expectedLed.green);
       expect(led.blue).to.equal(expectedLed.blue);
@@ -45,7 +45,7 @@ describe ('LedController', () => {
     await ledController.clearLeds().show();
   });
 
-  it ('should be able to clear the ledstrip"', async () => {
+  it ('should be able to clear the ledstrip"', async() => {
     const expectedLed: LedColor = {
       red: 255,
       green: 155,
@@ -54,7 +54,7 @@ describe ('LedController', () => {
 
     await ledController.fillLeds(expectedLed.red, expectedLed.green, expectedLed.blue).show();
 
-    for(const led of ledController.getLedstrip()) {
+    for (const led of ledController.getLedstrip()) {
       expect(led.red).to.equal(expectedLed.red);
       expect(led.green).to.equal(expectedLed.green);
       expect(led.blue).to.equal(expectedLed.blue);
@@ -62,14 +62,14 @@ describe ('LedController', () => {
 
     await ledController.clearLeds().show();
 
-    for(const led of ledController.getLedstrip()) {
+    for (const led of ledController.getLedstrip()) {
       expect(led.red).to.equal(0);
       expect(led.green).to.equal(0);
       expect(led.blue).to.equal(0);
     }
   });
 
-  it ('should be able to fill a single led"', async () => {
+  it ('should be able to fill a single led"', async() => {
     const expectedLed: LedColor = {
       red: 255,
       green: 155,
@@ -79,13 +79,12 @@ describe ('LedController', () => {
 
     await ledController.setLed(indexOfExpectedLed, expectedLed.red, expectedLed.green, expectedLed.blue).show();
 
-
     const ledstrip: Ledstrip = ledController.getLedstrip();
     const blankLeds: Ledstrip = ledstrip.slice();
     blankLeds.splice(indexOfExpectedLed, 1);
 
-    for(let index = 0; index < blankLeds.length; index++) {
-      if(index === indexOfExpectedLed) {
+    for (let index: number = 0; index < blankLeds.length; index++) {
+      if (index === indexOfExpectedLed) {
         continue;
       }
 
@@ -97,6 +96,44 @@ describe ('LedController', () => {
     expect(ledstrip[indexOfExpectedLed].red).to.equal(expectedLed.red);
     expect(ledstrip[indexOfExpectedLed].green).to.equal(expectedLed.green);
     expect(ledstrip[indexOfExpectedLed].blue).to.equal(expectedLed.blue);
+
+    await ledController.clearLeds().show();
+  });
+
+  it ('should be able to handle multiple changes at the same time', async() => {
+    const ledColor: LedColor = {
+      red: 255,
+      green: 155,
+      blue: 55,
+    };
+
+    await new Promise((resolve: Function): void => {
+      const unfillInterval: NodeJS.Timeout = setInterval(async(): Promise<void> => {
+        await ledController.fillLeds(0, 0, 0).show();
+      }, 100);
+
+      const fillInterval: NodeJS.Timeout = setInterval(async(): Promise<void> => {
+        await ledController.fillLeds(ledColor.red, ledColor.green, ledColor.blue).show();
+      }, 100);
+
+      const fillAgainInterval: NodeJS.Timeout = setInterval(async(): Promise<void> => {
+        await ledController.fillLeds(ledColor.red, ledColor.green, ledColor.blue).show();
+      }, 100);
+
+      setTimeout((): void => {
+        clearInterval(unfillInterval);
+        clearInterval(fillInterval);
+        clearInterval(fillAgainInterval);
+
+        resolve();
+      }, 1050);
+    });
+
+    const ledstrip: Ledstrip = ledController.getLedstrip();
+
+    expect(ledstrip[5].red).to.equal(ledColor.red);
+    expect(ledstrip[5].green).to.equal(ledColor.green);
+    expect(ledstrip[5].blue).to.equal(ledColor.blue);
 
     await ledController.clearLeds().show();
   });

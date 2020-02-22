@@ -95,6 +95,7 @@ animate();
 
 - ♻️ **Rewrite Code in TypeScript**
 - 🐛 **Fix Awaiting Show if Rerendering Needed**
+- 🐛 **Fix Rerendering**
 - ✅ Add Tests
 - ✨ Add Tslint
 
