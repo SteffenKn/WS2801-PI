@@ -9,6 +9,10 @@ export type LedColor = {
   green: number,
 };
 
+export type Ws2801PiConfig = {
+  debug?: boolean,
+};
+
 export type Ledstrip = Array<LedColor>;
 
 export default class LedController {
@@ -21,9 +25,9 @@ export default class LedController {
 
   private debug: boolean;
 
-  constructor(ledAmount: number, debug: boolean = false) {
+  constructor(ledAmount: number, config: Ws2801PiConfig = {}) {
     this.ledAmount = ledAmount;
-    this.debug = debug;
+    this.debug = config.debug === true;
 
     if (!this.debug) {
       this.spi = PiSpi.initialize('/dev/spidev0.0');
