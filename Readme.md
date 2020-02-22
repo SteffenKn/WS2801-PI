@@ -53,6 +53,13 @@ ledController
 
 > You should connect the GND and the V+ of the led strip to an external power supply.
 
+## Config
+
+| Config | Explanation |
+|:------------:|:----------:|
+| debug | Run without sending signals to the gpio ports. |
+| automaticRendering | Automatically run `show()` after changing Leds. |
+
 ## Example Animation
 
 ```javascript
