@@ -42,6 +42,10 @@ export default class LedController {
     this.clearLeds().show();
   }
 
+  public getLedstrip(): Ledstrip {
+    return this.displayedLedstrip;
+  }
+
   public setLed(led: number, red: number, green: number, blue: number): LedController {
     const ledIndex: number = led * 3;
 
@@ -72,10 +76,6 @@ export default class LedController {
     }
 
     return this;
-  }
-
-  public getLedstrip(): Ledstrip {
-    return this.displayedLedstrip;
   }
 
   public clearLeds(): LedController {
