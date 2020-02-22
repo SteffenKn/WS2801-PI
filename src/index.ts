@@ -105,7 +105,9 @@ export default class LedController {
       };
 
       if (this.debug) {
-        doneWriting();
+        setTimeout(() => {
+          doneWriting();
+        }, 60);
 
         return;
       }
