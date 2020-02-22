@@ -94,6 +94,7 @@ animate();
 ### v0.0.9
 
 - ♻️ **Rewrite Code in TypeScript**
+- ✨ **Add Automatic Rendering**
 - 🐛 **Fix Awaiting Show if Rerendering Needed**
 - 🐛 **Fix Rerendering**
 - ✅ Add Tests
