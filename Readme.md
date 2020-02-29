@@ -41,7 +41,9 @@ ledController
   .show();
 ```
 
-> Hint: Make sure to call show() after changing leds in order to physically change the led.
+> **Hint:** Make sure to call `show()` after changing leds in order to physically change the leds.
+
+> **Hint:** If `automaticRendering` is set `show()` does not have to be called. The rendering can then be awaited via `ledController.renderPromise`.
 
 ## Wiring
 
