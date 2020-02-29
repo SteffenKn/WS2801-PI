@@ -108,6 +108,7 @@ animate();
 
 - ♻️ **Rewrite Code in TypeScript**
 - ✨ **Add Automatic Rendering**
+- ✨ **Make ClockSpeed Changeable**
 - 🐛 **Fix Awaiting Show if Rerendering Needed**
 - 🐛 **Fix Rerendering**
 - ✅ Add Tests
