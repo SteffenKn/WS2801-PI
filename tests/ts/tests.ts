@@ -1,6 +1,6 @@
 import chai from 'chai';
 
-import LedController, {LedColor, Ledstrip} from '../../dist/index';
+import LedController, {ClockSpeed, LedColor, Ledstrip} from '../../dist/index';
 
 const expect: chai.ExpectStatic = chai.expect;
 
@@ -27,6 +27,18 @@ describe ('LedController', (): void => {
 
     expect(ledController).not.to.equal(undefined);
     expect(automaticRenderingLedController).not.to.equal(undefined);
+  });
+
+  it ('should be able to set the clockSpeed', (): void => {
+    const previousClockSpeed: ClockSpeed = ledController.clockSpeed;
+    const expectedClockSpeed: ClockSpeed = ClockSpeed.OneMHZ;
+
+    ledController.clockSpeed = expectedClockSpeed;
+
+    const currentClockSpeed: ClockSpeed = ledController.clockSpeed;
+
+    expect(previousClockSpeed).not.to.equal(expectedClockSpeed);
+    expect(currentClockSpeed).to.equal(expectedClockSpeed);
   });
 
   it ('should be able to get the ledstrip', (): void => {
