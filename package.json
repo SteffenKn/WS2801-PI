@@ -11,8 +11,8 @@
     "build:tests": "tsc --p tests/ts",
     "lint": "tslint --project .",
     "test": "npm run test:js && npm run test:ts",
-    "test:js": "mocha tests/js/tests.js --timeout 15000 --exit",
-    "test:ts": "mocha tests/ts/tests.js --timeout 15000 --exit",
+    "test:js": "c8 mocha tests/js/tests.js --timeout 15000 --exit",
+    "test:ts": "c8 mocha tests/ts/tests.js --timeout 15000 --exit",
     "test:pi": "npm run test:js -- --noDebug && npm run test:ts -- --noDebug"
   },
   "repository": {
@@ -32,6 +32,7 @@
     "@types/mocha": "^7.0.1",
     "@types/node": "^13.7.2",
     "@types/pi-spi": "0.0.28",
+    "c8": "7.1.0",
     "chai": "^4.2.0",
     "mocha": "^7.0.1",
     "optimist": "^0.6.1",
