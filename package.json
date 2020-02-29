@@ -24,19 +24,19 @@
   },
   "homepage": "https://github.com/SteffenKn/WS2801-PI#readme",
   "dependencies": {
-    "async-lock": "^1.2.2",
+    "async-lock": "1.2.2",
     "pi-spi": "1.2.1"
   },
   "devDependencies": {
-    "@types/async-lock": "^1.1.1",
-    "@types/mocha": "^7.0.1",
-    "@types/node": "^13.7.2",
+    "@types/async-lock": "1.1.1",
+    "@types/mocha": "7.0.1",
+    "@types/node": "12.12.6",
     "@types/pi-spi": "0.0.28",
     "c8": "7.1.0",
-    "chai": "^4.2.0",
-    "mocha": "^7.0.1",
-    "optimist": "^0.6.1",
-    "tslint": "^6.0.0",
-    "typescript": "^3.7.5"
+    "chai": "4.2.0",
+    "mocha": "7.1.0",
+    "optimist": "0.6.1",
+    "tslint": "6.0.0",
+    "typescript": "3.7.5"
   }
 }
