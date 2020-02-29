@@ -1,8 +1,6 @@
 import AsyncLock from 'async-lock';
 import * as PiSpi from 'pi-spi';
 
-const lock: AsyncLock = new AsyncLock();
-
 export type LedColor = {
   red: number,
   blue: number,
@@ -15,6 +13,8 @@ export type Ws2801PiConfig = {
 };
 
 export type Ledstrip = Array<LedColor>;
+
+const lock: AsyncLock = new AsyncLock();
 
 export default class LedController {
   public renderPromise: Promise<void>;
