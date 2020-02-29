@@ -57,10 +57,14 @@ ledController
 
 ## Config
 
-| Config | Explanation |
-|:------------:|:----------:|
-| debug | Run without sending signals to the gpio ports. |
-| automaticRendering | Automatically run `show()` after changing Leds. |
+| Config | Explanation | Type | Default |
+|:------------:|:----------:|:----------:|:----------:|
+| debug | Run without sending signals to the gpio ports. | boolean | false |
+| automaticRendering | Automatically run `show()` after changing Leds. | boolean | false |
+| clockSpeed | Set the desired [clockSpeed](https://projects.drogon.net/understanding-spi-on-the-raspberry-pi/). | ClockSpeed | 2e6 \| 2MHz |
+
+
+> The **clockSpeed** can also be changed via `ledController.clockSpeed`.
 
 ## Example Animation
 
@@ -104,6 +108,7 @@ animate();
 
 - ♻️ **Rewrite Code in TypeScript**
 - ✨ **Add Automatic Rendering**
+- ✨ **Make ClockSpeed Changeable**
 - 🐛 **Fix Awaiting Show if Rerendering Needed**
 - 🐛 **Fix Rerendering**
 - ✅ Add Tests
