@@ -1,6 +1,7 @@
 import chai from 'chai';
+import { argv } from 'optimist';
 
-import LedController, {ClockSpeed, LedColor, Ledstrip} from '../../dist/index';
+import LedController, { ClockSpeed, LedColor, Ledstrip } from '../../dist/index';
 
 const expect: chai.ExpectStatic = chai.expect;
 
@@ -15,10 +16,10 @@ describe ('LedController', (): void => {
 
   it ('should be able to create an LedController', async(): Promise<void> => {
     ledController = new LedController(10, {
-      debug: true,
+      debug: argv.noDebug !== true,
     });
     automaticRenderingLedController = new LedController(10, {
-      debug: true,
+      debug: argv.noDebug !== true,
       automaticRendering: true,
     });
 

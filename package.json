@@ -12,7 +12,8 @@
     "lint": "tslint --project .",
     "test": "npm run test:js && npm run test:ts",
     "test:js": "mocha tests/js/tests.js --timeout 15000 --exit",
-    "test:ts": "mocha tests/ts/tests.js --timeout 15000 --exit"
+    "test:ts": "mocha tests/ts/tests.js --timeout 15000 --exit",
+    "test:pi": "npm run test:js -- --noDebug && npm run test:ts -- --noDebug"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,7 @@
     "@types/pi-spi": "0.0.28",
     "chai": "^4.2.0",
     "mocha": "^7.0.1",
+    "optimist": "^0.6.1",
     "tslint": "^6.0.0",
     "typescript": "^3.7.5"
   }

@@ -5,6 +5,8 @@ const expect = chai.expect;
 const LedController = require('../../dist/index').default;
 const ClockSpeed = require('../../dist/index').ClockSpeed;
 
+const argv = require('optimist').argv;
+
 let ledController;
 let automaticRenderingLedController;
 
@@ -16,10 +18,10 @@ describe ('LedController', () => {
 
   it ('should be able to create an LedController"', async () => {
     ledController = new LedController(10, {
-      debug: true,
+      debug: argv.noDebug !== true,
     });
     automaticRenderingLedController = new LedController(10, {
-      debug: true,
+      debug: argv.noDebug !== true,
       automaticRendering: true,
     });
 
