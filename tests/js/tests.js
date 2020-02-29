@@ -152,6 +152,31 @@ describe ('LedController', () => {
     await ledController.clearLeds().show();
   });
 
+  it ('should only render ledstrip after show was called.', async () => {
+    const ledColor = {
+      red: 255,
+      green: 155,
+      blue: 55,
+    };
+
+    ledController.fillLeds(ledColor.red, ledColor.green, ledColor.blue);
+
+    const ledstripBeforeShow = ledController.getLedstrip();
+
+    expect(ledstripBeforeShow[5].red).to.equal(0);
+    expect(ledstripBeforeShow[5].green).to.equal(0);
+    expect(ledstripBeforeShow[5].blue).to.equal(0);
+
+    await ledController.show();
+
+    const ledstripAfterShow = ledController.getLedstrip();
+
+    expect(ledstripAfterShow[5].red).to.equal(ledColor.red);
+    expect(ledstripAfterShow[5].green).to.equal(ledColor.green);
+    expect(ledstripAfterShow[5].blue).to.equal(ledColor.blue);
+
+    await ledController.clearLeds().show();
+  });
 
   it ('should not be necessary to call show if automatic rendering is activated.', async () => {
     const ledColor = {
