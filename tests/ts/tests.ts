@@ -5,16 +5,26 @@ import LedController, {LedColor, Ledstrip} from '../../dist/index';
 const expect: chai.ExpectStatic = chai.expect;
 
 let ledController: LedController;
+let automaticRenderingLedController: LedController;
 
 describe ('LedController', () => {
   afterEach (async() => {
     await ledController.clearLeds().show();
+    await automaticRenderingLedController.clearLeds().renderPromise;
   });
 
   it ('should be able to create an LedController"', () => {
     ledController = new LedController(10, true);
+    automaticRenderingLedController = new LedController(10, {
+      debug: true,
+      automaticRendering: true,
+    });
+
+    await ledController.renderPromise;
+    await automaticRenderingLedController.renderPromise;
 
     expect(ledController).not.to.equal(undefined);
+    expect(automaticRenderingLedController).not.to.equal(undefined);
   });
 
   it ('should be able to get the ledstrip"', () => {
@@ -136,5 +146,25 @@ describe ('LedController', () => {
     expect(ledstrip[5].blue).to.equal(ledColor.blue);
 
     await ledController.clearLeds().show();
+  });
+
+  it ('should not be necessary to call show if automatic rendering is activated.', async(): Promise<void> => {
+    const ledColor: LedColor = {
+      red: 255,
+      green: 155,
+      blue: 55,
+    };
+
+    automaticRenderingLedController.fillLeds(ledColor.red, ledColor.green, ledColor.blue);
+    await automaticRenderingLedController.renderPromise;
+
+    const ledstrip: Ledstrip = automaticRenderingLedController.getLedstrip();
+
+    expect(ledstrip[5].red).to.equal(ledColor.red);
+    expect(ledstrip[5].green).to.equal(ledColor.green);
+    expect(ledstrip[5].blue).to.equal(ledColor.blue);
+
+    automaticRenderingLedController.clearLeds();
+    await automaticRenderingLedController.renderPromise;
   });
 });
