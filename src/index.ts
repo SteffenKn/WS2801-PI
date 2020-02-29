@@ -81,10 +81,13 @@ export default class LedController {
   }
 
   public show(): Promise<void> {
+    const ledsToFill: Ledstrip = this.undisplayedLedstrip.slice();
+    const ledBufferToWrite: Buffer = this.ledstripBuffer.slice();
+
     this.renderPromise = lock.acquire('show', async(done: Function): Promise<void> => {
 
       const doneWriting: (error?: Error, data?: Buffer) => Promise<void> = async(): Promise<void> => {
-        this.displayedLedstrip = this.undisplayedLedstrip;
+        this.displayedLedstrip = ledsToFill;
 
         done();
       };
@@ -97,7 +100,7 @@ export default class LedController {
         return;
       }
 
-      this.spi.write(this.ledstripBuffer, doneWriting);
+      this.spi.write(ledBufferToWrite, doneWriting);
     });
 
     return this.renderPromise;
