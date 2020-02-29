@@ -49,17 +49,7 @@ export default class LedController {
   }
 
   public setLed(led: number, red: number, green: number, blue: number): LedController {
-    const ledIndex: number = led * 3;
-
-    this.undisplayedLedstrip[led] = {
-      red: red,
-      green: green,
-      blue: blue,
-    };
-
-    this.ledstripBuffer[ledIndex] = red;
-    this.ledstripBuffer[ledIndex + 1] = green;
-    this.ledstripBuffer[ledIndex + 2] = blue;
+    this.colorizeLed(led, red, green, blue);
 
     if (this.automaticRendering) {
       this.show();
@@ -70,7 +60,7 @@ export default class LedController {
 
   public fillLeds(red: number, green: number, blue: number): LedController {
     for (let ledIndex: number = 0; ledIndex < this.ledAmount; ledIndex++) {
-      this.setLed(ledIndex, red, green, blue);
+      this.colorizeLed(ledIndex, red, green, blue);
     }
 
     if (this.automaticRendering) {
@@ -111,5 +101,19 @@ export default class LedController {
     });
 
     return this.renderPromise;
+  }
+
+  private colorizeLed(ledNumber: number, red: number, green: number, blue: number): void {
+    const ledIndex: number = ledNumber * 3;
+
+    this.undisplayedLedstrip[ledNumber] = {
+      red: red,
+      green: green,
+      blue: blue,
+    };
+
+    this.ledstripBuffer[ledIndex] = red;
+    this.ledstripBuffer[ledIndex + 1] = green;
+    this.ledstripBuffer[ledIndex + 2] = blue;
   }
 }
