@@ -13,7 +13,7 @@ describe ('LedController', (): void => {
     await automaticRenderingLedController.clearLeds().renderPromise;
   });
 
-  it ('should be able to create an LedController"', async(): Promise<void> => {
+  it ('should be able to create an LedController', async(): Promise<void> => {
     ledController = new LedController(10, {
       debug: true,
     });
@@ -29,7 +29,7 @@ describe ('LedController', (): void => {
     expect(automaticRenderingLedController).not.to.equal(undefined);
   });
 
-  it ('should be able to get the ledstrip"', (): void => {
+  it ('should be able to get the ledstrip', (): void => {
     const ledstrip: Ledstrip = ledController.getLedstrip();
 
     for (const led of ledstrip) {
@@ -39,7 +39,7 @@ describe ('LedController', (): void => {
     }
   });
 
-  it ('should be able to fill the ledstrip"', async(): Promise<void> => {
+  it ('should be able to fill the ledstrip', async(): Promise<void> => {
     const expectedLed: LedColor = {
       red: 255,
       green: 155,
@@ -57,7 +57,7 @@ describe ('LedController', (): void => {
     await ledController.clearLeds().show();
   });
 
-  it ('should be able to clear the ledstrip"', async(): Promise<void> => {
+  it ('should be able to clear the ledstrip', async(): Promise<void> => {
     const expectedLed: LedColor = {
       red: 255,
       green: 155,
@@ -81,7 +81,7 @@ describe ('LedController', (): void => {
     }
   });
 
-  it ('should be able to fill a single led"', async(): Promise<void> => {
+  it ('should be able to fill a single led', async(): Promise<void> => {
     const expectedLed: LedColor = {
       red: 255,
       green: 155,
