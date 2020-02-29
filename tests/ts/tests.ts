@@ -7,14 +7,16 @@ const expect: chai.ExpectStatic = chai.expect;
 let ledController: LedController;
 let automaticRenderingLedController: LedController;
 
-describe ('LedController', () => {
-  afterEach (async() => {
+describe ('LedController', (): void => {
+  afterEach (async(): Promise<void> => {
     await ledController.clearLeds().show();
     await automaticRenderingLedController.clearLeds().renderPromise;
   });
 
-  it ('should be able to create an LedController"', () => {
-    ledController = new LedController(10, true);
+  it ('should be able to create an LedController"', async(): Promise<void> => {
+    ledController = new LedController(10, {
+      debug: true,
+    });
     automaticRenderingLedController = new LedController(10, {
       debug: true,
       automaticRendering: true,
@@ -27,7 +29,7 @@ describe ('LedController', () => {
     expect(automaticRenderingLedController).not.to.equal(undefined);
   });
 
-  it ('should be able to get the ledstrip"', () => {
+  it ('should be able to get the ledstrip"', (): void => {
     const ledstrip: Ledstrip = ledController.getLedstrip();
 
     for (const led of ledstrip) {
@@ -37,7 +39,7 @@ describe ('LedController', () => {
     }
   });
 
-  it ('should be able to fill the ledstrip"', async() => {
+  it ('should be able to fill the ledstrip"', async(): Promise<void> => {
     const expectedLed: LedColor = {
       red: 255,
       green: 155,
@@ -55,7 +57,7 @@ describe ('LedController', () => {
     await ledController.clearLeds().show();
   });
 
-  it ('should be able to clear the ledstrip"', async() => {
+  it ('should be able to clear the ledstrip"', async(): Promise<void> => {
     const expectedLed: LedColor = {
       red: 255,
       green: 155,
@@ -79,7 +81,7 @@ describe ('LedController', () => {
     }
   });
 
-  it ('should be able to fill a single led"', async() => {
+  it ('should be able to fill a single led"', async(): Promise<void> => {
     const expectedLed: LedColor = {
       red: 255,
       green: 155,
@@ -110,7 +112,7 @@ describe ('LedController', () => {
     await ledController.clearLeds().show();
   });
 
-  it ('should be able to handle multiple changes at the same time', async() => {
+  it ('should be able to handle multiple changes at the same time', async(): Promise<void> => {
     const ledColor: LedColor = {
       red: 255,
       green: 155,
