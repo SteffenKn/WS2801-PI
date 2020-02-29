@@ -41,7 +41,9 @@ ledController
   .show();
 ```
 
-> Hint: Make sure to call show() after changing leds in order to physically change the led.
+> **Hint:** Make sure to call `show()` after changing leds in order to physically change the leds.
+
+> **Hint:** If `automaticRendering` is set `show()` does not have to be called. The rendering can then be awaited via `ledController.renderPromise`.
 
 ## Wiring
 
@@ -52,6 +54,13 @@ ledController
 | MOSI | Data |
 
 > You should connect the GND and the V+ of the led strip to an external power supply.
+
+## Config
+
+| Config | Explanation |
+|:------------:|:----------:|
+| debug | Run without sending signals to the gpio ports. |
+| automaticRendering | Automatically run `show()` after changing Leds. |
 
 ## Example Animation
 
@@ -94,6 +103,7 @@ animate();
 ### v0.0.9
 
 - ♻️ **Rewrite Code in TypeScript**
+- ✨ **Add Automatic Rendering**
 - 🐛 **Fix Awaiting Show if Rerendering Needed**
 - 🐛 **Fix Rerendering**
 - ✅ Add Tests
