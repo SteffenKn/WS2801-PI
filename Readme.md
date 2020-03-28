@@ -104,6 +104,10 @@ animate();
 
 ## Changelog
 
+### v0.0.10
+
+- 🐛 Fix Publishing
+
 ### v0.0.9
 
 - ♻️ **Rewrite Code in TypeScript**
