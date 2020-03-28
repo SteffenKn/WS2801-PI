@@ -1,0 +1,7 @@
+node_modules/
+dist/
+coverage/
+
+tests/ts/tests.js
+package-lock.json
+.DS_Store
