@@ -19,6 +19,15 @@
     "type": "git",
     "url": "git+https://github.com/SteffenKn/WS2801-PI.git"
   },
+  "keywords": [
+    "WS2801",
+    "Led",
+    "Strip",
+    "Controller",
+    "LedController",
+    "Pi",
+    "Raspberry"
+  ],
   "bugs": {
     "url": "https://github.com/SteffenKn/WS2801-PI/issues"
   },
