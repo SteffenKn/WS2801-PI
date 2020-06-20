@@ -1,6 +1,8 @@
 import AsyncLock from 'async-lock';
 import * as PiSpi from 'pi-spi';
 
+export type LedStrip = Array<LedColor>;
+
 export type LedColor = {
   red: number,
   blue: number,
@@ -13,10 +15,6 @@ export type Ws2801PiConfig = {
   spiClockSpeed?: ClockSpeed,
 };
 
-export type Ledstrip = Array<LedColor>;
-
-const lock: AsyncLock = new AsyncLock();
-
 export enum ClockSpeed {
   ZeroPointFiveMHZ = 0.5e6,
   OneMHZ = 1e6,
@@ -27,6 +25,8 @@ export enum ClockSpeed {
   ThirtyTwoMHZ = 32e6,
 }
 
+const lock: AsyncLock = new AsyncLock();
+
 const DEFAULT_CLOCK_SPEED: ClockSpeed = ClockSpeed.TwoMHZ;
 
 export default class LedController {
@@ -35,9 +35,9 @@ export default class LedController {
   private spi: PiSpi.SPI;
 
   private ledAmount: number;
-  private ledstripBuffer: Buffer;
-  private undisplayedLedstrip: Ledstrip = [];
-  private displayedLedstrip: Ledstrip = [];
+  private ledStripBuffer: Buffer;
+  private undisplayedLedStrip: LedStrip = [];
+  private displayedLedStrip: LedStrip = [];
   private spiClockSpeed: ClockSpeed;
 
   private debug: boolean;
@@ -54,7 +54,7 @@ export default class LedController {
       this.clockSpeed = config.spiClockSpeed ? config.spiClockSpeed : DEFAULT_CLOCK_SPEED;
     }
 
-    this.ledstripBuffer = Buffer.alloc(this.ledAmount * 3);
+    this.ledStripBuffer = Buffer.alloc(this.ledAmount * 3);
 
     this.clearLeds().show();
   }
@@ -71,12 +71,12 @@ export default class LedController {
     return this.spiClockSpeed;
   }
 
-  public getLedstrip(): Ledstrip {
-    return this.displayedLedstrip;
+  public getLedStrip(): LedStrip {
+    return this.displayedLedStrip;
   }
 
-  public setLed(led: number, red: number, green: number, blue: number): LedController {
-    this.colorizeLed(led, red, green, blue);
+  public setLed(ledIndex: number, color: LedColor): LedController {
+    this.colorizeLed(ledIndex, color);
 
     if (this.automaticRendering) {
       this.show();
@@ -85,9 +85,9 @@ export default class LedController {
     return this;
   }
 
-  public fillLeds(red: number, green: number, blue: number): LedController {
+  public fillLeds(color: LedColor): LedController {
     for (let ledIndex: number = 0; ledIndex < this.ledAmount; ledIndex++) {
-      this.colorizeLed(ledIndex, red, green, blue);
+      this.colorizeLed(ledIndex, color);
     }
 
     if (this.automaticRendering) {
@@ -98,7 +98,8 @@ export default class LedController {
   }
 
   public clearLeds(): LedController {
-    this.fillLeds(0, 0, 0);
+    const black: LedColor = {red: 0, green: 0, blue: 0};
+    this.fillLeds(black);
 
     if (this.automaticRendering) {
       this.show();
@@ -108,13 +109,13 @@ export default class LedController {
   }
 
   public show(): Promise<void> {
-    const ledsToFill: Ledstrip = this.undisplayedLedstrip.slice();
-    const ledBufferToWrite: Buffer = this.ledstripBuffer.slice();
+    const ledsToFill: LedStrip = this.undisplayedLedStrip.slice();
+    const ledBufferToWrite: Buffer = this.ledStripBuffer.slice();
 
-    this.renderPromise = lock.acquire('show', async(done: Function): Promise<void> => {
+    this.renderPromise = lock.acquire('render', async(done: Function): Promise<void> => {
 
       const doneWriting: (error?: Error, data?: Buffer) => Promise<void> = async(): Promise<void> => {
-        this.displayedLedstrip = ledsToFill;
+        this.displayedLedStrip = ledsToFill;
 
         done();
       };
@@ -133,17 +134,21 @@ export default class LedController {
     return this.renderPromise;
   }
 
-  private colorizeLed(ledNumber: number, red: number, green: number, blue: number): void {
+  private colorizeLed(ledNumber: number, color: LedColor): void {
     const ledIndex: number = ledNumber * 3;
 
-    this.undisplayedLedstrip[ledNumber] = {
+    const red: number = Math.max(0, Math.min(color.red, 255));
+    const green: number = Math.max(0, Math.min(color.green, 255));
+    const blue: number = Math.max(0, Math.min(color.blue, 255));
+
+    this.undisplayedLedStrip[ledNumber] = {
       red: red,
       green: green,
       blue: blue,
     };
 
-    this.ledstripBuffer[ledIndex] = red;
-    this.ledstripBuffer[ledIndex + 1] = green;
-    this.ledstripBuffer[ledIndex + 2] = blue;
+    this.ledStripBuffer[ledIndex] = red;
+    this.ledStripBuffer[ledIndex + 1] = green;
+    this.ledStripBuffer[ledIndex + 2] = blue;
   }
 }

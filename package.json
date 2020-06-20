@@ -1,7 +1,7 @@
 {
   "name": "ws2801-pi",
-  "version": "0.0.10",
-  "description": "A simple module to control a ws2801 led strip with a pi via SPI.",
+  "version": "1.0.0",
+  "description": "WS2801-Pi is a module for controlling WS2801 LED strips with a Raspberry Pi via SPI.",
   "main": "dist/index.js",
   "author": "Steffen Knaup <steffenknaup@hotmail.de>",
   "license": "MIT",
@@ -19,24 +19,33 @@
     "type": "git",
     "url": "git+https://github.com/SteffenKn/WS2801-PI.git"
   },
+  "keywords": [
+    "WS2801",
+    "Led",
+    "Strip",
+    "Controller",
+    "LedController",
+    "Pi",
+    "Raspberry"
+  ],
   "bugs": {
     "url": "https://github.com/SteffenKn/WS2801-PI/issues"
   },
   "homepage": "https://github.com/SteffenKn/WS2801-PI#readme",
   "dependencies": {
-    "async-lock": "1.2.2",
+    "async-lock": "1.2.4",
     "pi-spi": "1.2.1"
   },
   "devDependencies": {
-    "@types/async-lock": "1.1.1",
-    "@types/mocha": "7.0.1",
+    "@types/async-lock": "1.1.2",
+    "@types/mocha": "7.0.2",
     "@types/node": "12.12.6",
     "@types/pi-spi": "0.0.28",
-    "c8": "7.1.0",
+    "c8": "7.2.0",
     "chai": "4.2.0",
-    "mocha": "7.1.0",
+    "mocha": "8.0.1",
     "optimist": "0.6.1",
-    "tslint": "6.0.0",
-    "typescript": "3.7.5"
+    "tslint": "6.1.2",
+    "typescript": "3.9.5"
   }
 }
