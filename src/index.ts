@@ -112,7 +112,7 @@ export default class LedController {
     const ledsToFill: LedStrip = this.undisplayedLedStrip.slice();
     const ledBufferToWrite: Buffer = this.ledStripBuffer.slice();
 
-    this.renderPromise = lock.acquire('show', async(done: Function): Promise<void> => {
+    this.renderPromise = lock.acquire('render', async(done: Function): Promise<void> => {
 
       const doneWriting: (error?: Error, data?: Buffer) => Promise<void> = async(): Promise<void> => {
         this.displayedLedStrip = ledsToFill;
