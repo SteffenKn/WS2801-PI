@@ -1,7 +1,7 @@
 {
   "name": "ws2801-pi",
   "version": "0.0.10",
-  "description": "A simple module to control a ws2801 led strip with a pi via SPI.",
+  "description": "WS2801-Pi is a module for controlling WS2801 LED strips with a Raspberry Pi via SPI.",
   "main": "dist/index.js",
   "author": "Steffen Knaup <steffenknaup@hotmail.de>",
   "license": "MIT",
