@@ -137,9 +137,9 @@ export default class LedController {
   private colorizeLed(ledNumber: number, color: LedColor): void {
     const ledIndex: number = ledNumber * 3;
 
-    const red: number = Math.min(0, Math.max(color.red, 255));
-    const green: number = Math.min(0, Math.max(color.green, 255));
-    const blue: number = Math.min(0, Math.max(color.blue, 255));
+    const red: number = Math.max(0, Math.min(color.red, 255));
+    const green: number = Math.max(0, Math.min(color.green, 255));
+    const blue: number = Math.max(0, Math.min(color.blue, 255));
 
     this.undisplayedLedStrip[ledNumber] = {
       red: red,
