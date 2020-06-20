@@ -1,6 +1,8 @@
 import AsyncLock from 'async-lock';
 import * as PiSpi from 'pi-spi';
 
+export type Ledstrip = Array<LedColor>;
+
 export type LedColor = {
   red: number,
   blue: number,
@@ -13,10 +15,6 @@ export type Ws2801PiConfig = {
   spiClockSpeed?: ClockSpeed,
 };
 
-export type Ledstrip = Array<LedColor>;
-
-const lock: AsyncLock = new AsyncLock();
-
 export enum ClockSpeed {
   ZeroPointFiveMHZ = 0.5e6,
   OneMHZ = 1e6,
@@ -26,6 +24,8 @@ export enum ClockSpeed {
   SixteenMHZ = 16e6,
   ThirtyTwoMHZ = 32e6,
 }
+
+const lock: AsyncLock = new AsyncLock();
 
 const DEFAULT_CLOCK_SPEED: ClockSpeed = ClockSpeed.TwoMHZ;
 
