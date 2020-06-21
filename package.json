@@ -13,7 +13,10 @@
     "test": "npm run test:js && npm run test:ts",
     "test:js": "c8 mocha tests/js/tests.js --timeout 15000 --exit",
     "test:ts": "c8 mocha tests/ts/tests.js --timeout 15000 --exit",
-    "test:pi": "npm run test:js -- --noDebug && npm run test:ts -- --noDebug"
+    "test:pi": "npm run test:js -- --noDebug && npm run test:ts -- --noDebug",
+    "test:coverage": "npm run test:coverage-check && npm run test:coverage-report",
+    "test:coverage-check": "c8 check-coverage --lines 70 --functions 70 --branches 70",
+    "test:coverage-report": "c8 report"
   },
   "repository": {
     "type": "git",

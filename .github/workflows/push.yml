@@ -1,0 +1,87 @@
+name: Ci
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js 12
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12'
+
+    - name: Versions
+      run: |
+        node -v
+        npm -v
+
+    - name: Install
+      run: npm install
+
+    - name: Lint
+      run: npm run lint
+
+    - name: Build
+      run: npm run build:package
+
+    - name: Stash dist
+      uses: actions/upload-artifact@master
+      with:
+        name: dist
+        path: dist/
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js 12
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12'
+
+    - name: Unstash dist
+      uses: actions/download-artifact@master
+      with:
+        name: dist
+        path: "dist/"
+
+    - name: Install
+      run: npm install
+
+    - name: Build
+      run: npm run build:tests
+
+    - name: Test
+      run: npm test
+
+    - name: Check test coverage
+      run: npm run test:coverage
+
+  publish-npm:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/master'
+
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+
+
+      - name: Unstash dist
+        uses: actions/download-artifact@master
+        with:
+          name: dist
+          path: "dist/"
+
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
