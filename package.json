@@ -34,7 +34,7 @@
   "bugs": {
     "url": "https://github.com/SteffenKn/WS2801-PI/issues"
   },
-  "homepage": "https://github.com/SteffenKn/WS2801-PI#readme",
+  "homepage": "http://ws2801-pi.knaup.dev/",
   "dependencies": {
     "async-lock": "1.2.4",
     "pi-spi": "1.2.1"
