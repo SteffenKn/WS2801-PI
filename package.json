@@ -36,7 +36,7 @@
   },
   "homepage": "http://ws2801-pi.knaup.dev/",
   "dependencies": {
-    "async-lock": "1.2.4",
+    "async-lock": "1.2.6",
     "pi-spi": "1.2.1"
   },
   "devDependencies": {
