@@ -1,6 +1,6 @@
 {
   "name": "ws2801-pi",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "WS2801-Pi is a module for controlling WS2801 LED strips with a Raspberry Pi via SPI.",
   "main": "dist/index.js",
   "author": "Steffen Knaup <steffenknaup@hotmail.de>",
@@ -34,9 +34,9 @@
   "bugs": {
     "url": "https://github.com/SteffenKn/WS2801-PI/issues"
   },
-  "homepage": "https://github.com/SteffenKn/WS2801-PI#readme",
+  "homepage": "http://ws2801-pi.knaup.dev/",
   "dependencies": {
-    "async-lock": "1.2.4",
+    "async-lock": "1.2.6",
     "pi-spi": "1.2.1"
   },
   "devDependencies": {

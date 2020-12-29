@@ -35,9 +35,9 @@ export default class LedController {
   private spi: PiSpi.SPI;
 
   private ledAmount: number;
-  private ledStripBuffer: Buffer;
   private undisplayedLedStrip: LedStrip = [];
   private displayedLedStrip: LedStrip = [];
+  private brightness: number | 'auto' = 'auto';
   private spiClockSpeed: ClockSpeed;
 
   private debug: boolean;
@@ -53,8 +53,6 @@ export default class LedController {
 
       this.clockSpeed = config.spiClockSpeed ? config.spiClockSpeed : DEFAULT_CLOCK_SPEED;
     }
-
-    this.ledStripBuffer = Buffer.alloc(this.ledAmount * 3);
 
     this.clearLeds().show();
   }
@@ -97,6 +95,20 @@ export default class LedController {
     return this;
   }
 
+  public setBrightness(brightness: number | 'auto'): LedController {
+    if ((typeof brightness !== 'number' && brightness !== 'auto') || brightness < 0 || brightness > 100) {
+      throw new Error(`The brightness must be between 0 and 100 or 'auto'.`);
+    }
+
+    this.brightness = brightness;
+
+    return this;
+  }
+
+  public getBrightness(): number | 'auto' {
+    return this.brightness;
+  }
+
   public clearLeds(): LedController {
     const black: LedColor = {red: 0, green: 0, blue: 0};
     this.fillLeds(black);
@@ -110,7 +122,7 @@ export default class LedController {
 
   public show(): Promise<void> {
     const ledsToFill: LedStrip = this.undisplayedLedStrip.slice();
-    const ledBufferToWrite: Buffer = this.ledStripBuffer.slice();
+    const ledBufferToWrite: Buffer = this.getLedStripAsBuffer(ledsToFill);
 
     this.renderPromise = lock.acquire('render', async(done: Function): Promise<void> => {
 
@@ -135,20 +147,57 @@ export default class LedController {
   }
 
   private colorizeLed(ledNumber: number, color: LedColor): void {
-    const ledIndex: number = ledNumber * 3;
-
-    const red: number = Math.max(0, Math.min(color.red, 255));
-    const green: number = Math.max(0, Math.min(color.green, 255));
-    const blue: number = Math.max(0, Math.min(color.blue, 255));
-
-    this.undisplayedLedStrip[ledNumber] = {
-      red: red,
-      green: green,
-      blue: blue,
+    const fixedColor: LedColor = {
+      red: Math.max(0, Math.min(color.red, 255)),
+      green: Math.max(0, Math.min(color.green, 255)),
+      blue: Math.max(0, Math.min(color.blue, 255)),
     };
 
-    this.ledStripBuffer[ledIndex] = red;
-    this.ledStripBuffer[ledIndex + 1] = green;
-    this.ledStripBuffer[ledIndex + 2] = blue;
+    this.undisplayedLedStrip[ledNumber] = fixedColor;
+  }
+
+  private getLedStripAsBuffer(ledStrip: LedStrip): Buffer {
+    const ledStripBuffer: Buffer =  Buffer.alloc(this.ledAmount * 3);
+
+    for (let ledNumber: number = 0; ledNumber < this.ledAmount; ledNumber++) {
+      const brightnessAdjustedColor: LedColor = this.getBrightnessAdjustedColor(ledStrip[ledNumber]);
+
+      const ledBufferIndex: number = ledNumber * 3;
+      ledStripBuffer[ledBufferIndex] = brightnessAdjustedColor.red;
+      ledStripBuffer[ledBufferIndex + 1] = brightnessAdjustedColor.green;
+      ledStripBuffer[ledBufferIndex + 2] = brightnessAdjustedColor.blue;
+    }
+
+    return ledStripBuffer;
+  }
+
+  private getBrightnessAdjustedColor(color: LedColor): LedColor {
+    if (this.brightness === 'auto') {
+      return color;
+    }
+
+    const brightnessMultiplier: number = this.brightness / 100 * 255;
+
+    const highestColorValue: number = this.getHighestColorValue(color);
+
+    const brightnessAdjustedColor: LedColor = {
+      red: color.red / highestColorValue * brightnessMultiplier,
+      green: color.green / highestColorValue * brightnessMultiplier,
+      blue: color.blue / highestColorValue * brightnessMultiplier,
+    };
+
+    return brightnessAdjustedColor;
+  }
+
+  private getHighestColorValue(color: LedColor): number {
+    if (color.red >= color.green && color.red >= color.blue) {
+      return color.red;
+    }
+
+    if (color.green >= color.blue) {
+      return color.green;
+    }
+
+    return color.blue;
   }
 }

@@ -9,7 +9,7 @@ WS2801-Pi is a module for controlling WS2801 LED strips with a Raspberry Pi via 
 
 ## Documentation
 
-The documentation can be found [here](http://ws2801-pi.cddnss.pw/).
+The documentation can be found [here](http://ws2801-pi.knaup.dev/).
 
 ## Wiring
 
