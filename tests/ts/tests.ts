@@ -126,6 +126,28 @@ describe ('LedController', (): void => {
     await ledController.clearLeds().show();
   });
 
+  it ('should be able to change the brightness', async () => {
+    const brightnessToSet: number = 50;
+
+    await ledController.setBrightness(brightnessToSet).show();
+
+
+    let actualBrightness: number | 'auto' = ledController.getBrightness();
+
+    expect(actualBrightness).to.equal(brightnessToSet);
+
+    await ledController.setBrightness('auto').show();
+    actualBrightness = ledController.getBrightness();
+
+    expect(actualBrightness).to.equal('auto');
+  });
+
+  it ('should throw an error if the brightness value is invalid', () => {
+    expect(ledController.setBrightness.bind(ledController, -1)).to.throw(`The brightness must be between 0 and 100 or 'auto'.`);
+    expect(ledController.setBrightness.bind(ledController, 101)).to.throw(`The brightness must be between 0 and 100 or 'auto'.`);
+    expect(ledController.setBrightness.bind(ledController, 'aut')).to.throw(`The brightness must be between 0 and 100 or 'auto'.`);
+  });
+
   it ('should be able to handle multiple changes at the same time', async(): Promise<void> => {
     const ledColor: LedColor = {
       red: 255,
