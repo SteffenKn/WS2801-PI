@@ -96,6 +96,10 @@ export default class LedController {
   }
 
   public setBrightness(brightness: number | 'auto'): LedController {
+    if ((typeof brightness !== 'number' && brightness !== 'auto') || brightness < 0 || brightness > 100) {
+      throw new Error(`The brightness must be between 0 and 100 or 'auto'.`);
+    }
+
     this.brightness = brightness;
 
     return this;
