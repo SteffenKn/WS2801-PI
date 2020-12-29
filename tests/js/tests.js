@@ -16,7 +16,7 @@ describe ('LedController', () => {
     await automaticRenderingLedController.clearLeds().renderPromise;
   });
 
-  it ('should be able to create an LedController"', async () => {
+  it ('should be able to create an LedController', async () => {
     ledController = new LedController(10, {
       debug: argv.noDebug !== true,
     });
@@ -44,7 +44,7 @@ describe ('LedController', () => {
     expect(currentClockSpeed).to.equal(expectedClockSpeed);
   });
 
-  it ('should be able to get the led strip"', () => {
+  it ('should be able to get the led strip', () => {
     const ledStrip = ledController.getLedStrip();
 
     for (const led of ledStrip) {
@@ -54,7 +54,7 @@ describe ('LedController', () => {
     }
   });
 
-  it ('should be able to fill the led strip"', async () => {
+  it ('should be able to fill the led strip', async () => {
     const expectedLedColor = {
       red: 255,
       green: 155,
@@ -72,7 +72,7 @@ describe ('LedController', () => {
     await ledController.clearLeds().show();
   });
 
-  it ('should be able to clear the led strip"', async () => {
+  it ('should be able to clear the led strip', async () => {
     const expectedLedColor = {
       red: 255,
       green: 155,
@@ -96,7 +96,7 @@ describe ('LedController', () => {
     }
   });
 
-  it ('should be able to fill a single led"', async () => {
+  it ('should be able to fill a single led', async () => {
     const expectedLedColor = {
       red: 255,
       green: 155,
