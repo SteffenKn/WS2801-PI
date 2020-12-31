@@ -25,6 +25,16 @@ export enum ClockSpeed {
   ThirtyTwoMHZ = 32e6,
 }
 
+type Listener = {
+  event: string,
+  callback: Function,
+};
+
+enum EventNames {
+  LedStripChanged = 'led-strip-changed',
+  BrightnessChanged = 'brightness-changed',
+}
+
 const lock: AsyncLock = new AsyncLock();
 
 const DEFAULT_CLOCK_SPEED: ClockSpeed = ClockSpeed.TwoMHZ;
@@ -42,6 +52,8 @@ export default class LedController {
 
   private debug: boolean;
   private automaticRendering: boolean;
+
+  private listeners: {[id: string]: Listener} = {};
 
   constructor(ledAmount: number, config: Ws2801PiConfig = {}) {
     this.ledAmount = ledAmount;
@@ -102,6 +114,8 @@ export default class LedController {
 
     this.brightness = brightness;
 
+    this.brightnessChanged();
+
     return this;
   }
 
@@ -129,6 +143,8 @@ export default class LedController {
       const doneWriting: (error?: Error, data?: Buffer) => Promise<void> = async(): Promise<void> => {
         this.displayedLedStrip = ledsToFill;
 
+        this.ledStripChanged();
+
         done();
       };
 
@@ -144,6 +160,50 @@ export default class LedController {
     });
 
     return this.renderPromise;
+  }
+
+  public onLedStripChanged(callback: Function): string {
+    const id: string = this.generateId(5);
+
+    this.listeners[id] = {
+      event: EventNames.LedStripChanged,
+      callback: callback,
+    };
+
+    return id;
+  }
+
+  public onBrightnessChanged(callback: Function): string {
+    const id: string = this.generateId(5);
+
+    this.listeners[id] = {
+      event: EventNames.BrightnessChanged,
+      callback: callback,
+    };
+
+    return id;
+  }
+
+  public removeEventListener(id: string): void {
+    this.listeners[id] = undefined;
+  }
+
+  private ledStripChanged(): void {
+    const ledStripChangedListeners: Array<Listener> =
+      Object.values(this.listeners).filter((listener: Listener): boolean => listener.event === EventNames.LedStripChanged);
+
+    for (const listener of ledStripChangedListeners) {
+      listener.callback(this.getLedStrip());
+    }
+  }
+
+  private brightnessChanged(): void {
+    const brightnessChangedListeners: Array<Listener> =
+      Object.values(this.listeners).filter((listener: Listener): boolean => listener.event === EventNames.BrightnessChanged);
+
+    for (const listener of brightnessChangedListeners) {
+      listener.callback(this.brightness);
+    }
   }
 
   private colorizeLed(ledNumber: number, color: LedColor): void {
@@ -200,4 +260,16 @@ export default class LedController {
 
     return color.blue;
   }
+
+  private generateId(idLength: number): string {
+    let result: string = '';
+    const characters: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength: number = characters.length;
+
+    for ( let i = 0; i < idLength; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+
+    return result;
+ }
 }
