@@ -1,5 +1,7 @@
 import AsyncLock from 'async-lock';
-import * as PiSpi from 'pi-spi';
+import PiSpi from 'pi-spi';
+
+import {validateLedStrip} from './led-strip-validation';
 
 export type LedStrip = Array<LedColor>;
 
@@ -128,6 +130,20 @@ export default class LedController {
     this.fillLeds(black);
 
     if (this.automaticRendering) {
+      this.show();
+    }
+
+    return this;
+  }
+
+  public setLedStrip(ledStrip: LedStrip): LedController {
+    validateLedStrip(this.ledAmount, ledStrip);
+
+    for (let ledIndex: number = 0; ledIndex < this.ledAmount; ledIndex++) {
+      this.colorizeLed(ledIndex, ledStrip[ledIndex]);
+    }
+
+    if (this.automaticRendering) {
       this.show();
     }
 
