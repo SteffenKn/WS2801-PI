@@ -131,7 +131,6 @@ describe ('LedController', (): void => {
 
     await ledController.setBrightness(brightnessToSet).show();
 
-
     let actualBrightness: number | 'auto' = ledController.getBrightness();
 
     expect(actualBrightness).to.equal(brightnessToSet);
