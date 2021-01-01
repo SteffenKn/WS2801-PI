@@ -283,7 +283,7 @@ export default class LedController {
     const characters: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength: number = characters.length;
 
-    for ( let i = 0; i < idLength; i++ ) {
+    for (let index: number = 0; index < idLength; index++ ) {
        result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
 
