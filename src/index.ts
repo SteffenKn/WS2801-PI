@@ -160,7 +160,7 @@ export default class LedController {
       const doneWriting: (error?: Error, data?: Buffer) => Promise<void> = async(): Promise<void> => {
         this.displayedLedStrip = ledsToFill;
 
-        this.ledStripChanged();
+        this.ledStripChanged(ledsToFill);
 
         done();
       };
@@ -205,12 +205,12 @@ export default class LedController {
     this.listeners[id] = undefined;
   }
 
-  private ledStripChanged(): void {
+  private ledStripChanged(ledStrip: LedStrip): void {
     const ledStripChangedListeners: Array<Listener> =
       Object.values(this.listeners).filter((listener: Listener): boolean => listener.event === EventNames.LedStripChanged);
 
     for (const listener of ledStripChangedListeners) {
-      listener.callback(this.getLedStrip());
+      listener.callback(ledStrip);
     }
   }
 
