@@ -7,8 +7,13 @@ const ClockSpeed = require('../../dist/index').ClockSpeed;
 
 const argv = require('optimist').argv;
 
-let ledController;
-let automaticRenderingLedController;
+const ledController = new LedController(10, {
+  debug: argv.noDebug !== true,
+});
+const automaticRenderingLedController = new LedController(10, {
+  debug: argv.noDebug !== true,
+  automaticRendering: true,
+});
 
 describe ('LedController', () => {
   afterEach (async () => {
@@ -17,19 +22,19 @@ describe ('LedController', () => {
   });
 
   it ('should be able to create an LedController', async () => {
-    ledController = new LedController(10, {
+    const createdLedController = new LedController(10, {
       debug: argv.noDebug !== true,
     });
-    automaticRenderingLedController = new LedController(10, {
+    const createdAutomaticRenderingLedController = new LedController(10, {
       debug: argv.noDebug !== true,
       automaticRendering: true,
     });
 
-    await ledController.renderPromise;
-    await automaticRenderingLedController.renderPromise;
+    await createdLedController.renderPromise;
+    await createdAutomaticRenderingLedController.renderPromise;
 
-    expect(ledController).not.to.equal(undefined);
-    expect(automaticRenderingLedController).not.to.equal(undefined);
+    expect(createdLedController).not.to.equal(undefined);
+    expect(createdAutomaticRenderingLedController).not.to.equal(undefined);
   });
 
   it ('should be able to set the clockSpeed', () => {

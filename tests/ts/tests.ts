@@ -1,12 +1,15 @@
-import chai from 'chai';
+import {expect} from 'chai';
 import {argv} from 'optimist';
 
 import LedController, { ClockSpeed, LedColor, LedStrip } from '../../dist/index';
 
-const expect: chai.ExpectStatic = chai.expect;
-
-let ledController: LedController;
-let automaticRenderingLedController: LedController;
+const ledController: LedController = new LedController(10, {
+  debug: argv.noDebug !== true,
+});
+const automaticRenderingLedController: LedController = new LedController(10, {
+  debug: argv.noDebug !== true,
+  automaticRendering: true,
+});
 
 describe ('LedController', (): void => {
   afterEach (async(): Promise<void> => {
@@ -15,20 +18,20 @@ describe ('LedController', (): void => {
   });
 
   it ('should be able to create an LedController', async(): Promise<void> => {
-    ledController = new LedController(10, {
+    const createdLedController = new LedController(10, {
       debug: argv.noDebug !== true,
     });
 
-    automaticRenderingLedController = new LedController(10, {
+    const createdAutomaticRenderingLedController = new LedController(10, {
       debug: argv.noDebug !== true,
       automaticRendering: true,
     });
 
-    await ledController.renderPromise;
-    await automaticRenderingLedController.renderPromise;
+    await createdLedController.renderPromise;
+    await createdAutomaticRenderingLedController.renderPromise;
 
-    expect(ledController).not.to.equal(undefined);
-    expect(automaticRenderingLedController).not.to.equal(undefined);
+    expect(createdLedController).not.to.equal(undefined);
+    expect(createdAutomaticRenderingLedController).not.to.equal(undefined);
   });
 
   it ('should be able to set the clockSpeed', (): void => {
