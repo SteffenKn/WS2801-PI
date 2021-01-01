@@ -1,6 +1,6 @@
 {
   "name": "ws2801-pi",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "WS2801-Pi is a module for controlling WS2801 LED strips with a Raspberry Pi via SPI.",
   "main": "dist/index.js",
   "author": "Steffen Knaup <steffenknaup@hotmail.de>",
@@ -41,14 +41,16 @@
   },
   "devDependencies": {
     "@types/async-lock": "1.1.2",
-    "@types/mocha": "7.0.2",
-    "@types/node": "12.12.6",
+    "@types/chai": "4.2.14",
+    "@types/mocha": "8.2.0",
+    "@types/node": "14.14.19",
+    "@types/optimist": "0.0.29",
     "@types/pi-spi": "0.0.28",
-    "c8": "7.2.0",
+    "c8": "7.4.0",
     "chai": "4.2.0",
-    "mocha": "8.0.1",
+    "mocha": "8.2.1",
     "optimist": "0.6.1",
-    "tslint": "6.1.2",
-    "typescript": "3.9.5"
+    "tslint": "6.1.3",
+    "typescript": "4.1.3"
   }
 }

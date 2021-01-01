@@ -7,8 +7,13 @@ const ClockSpeed = require('../../dist/index').ClockSpeed;
 
 const argv = require('optimist').argv;
 
-let ledController;
-let automaticRenderingLedController;
+const ledController = new LedController(10, {
+  debug: argv.noDebug !== true,
+});
+const automaticRenderingLedController = new LedController(10, {
+  debug: argv.noDebug !== true,
+  automaticRendering: true,
+});
 
 describe ('LedController', () => {
   afterEach (async () => {
@@ -17,19 +22,19 @@ describe ('LedController', () => {
   });
 
   it ('should be able to create an LedController', async () => {
-    ledController = new LedController(10, {
+    const createdLedController = new LedController(10, {
       debug: argv.noDebug !== true,
     });
-    automaticRenderingLedController = new LedController(10, {
+    const createdAutomaticRenderingLedController = new LedController(10, {
       debug: argv.noDebug !== true,
       automaticRendering: true,
     });
 
-    await ledController.renderPromise;
-    await automaticRenderingLedController.renderPromise;
+    await createdLedController.renderPromise;
+    await createdAutomaticRenderingLedController.renderPromise;
 
-    expect(ledController).not.to.equal(undefined);
-    expect(automaticRenderingLedController).not.to.equal(undefined);
+    expect(createdLedController).not.to.equal(undefined);
+    expect(createdAutomaticRenderingLedController).not.to.equal(undefined);
   });
 
   it ('should be able to set the clockSpeed', () => {
@@ -96,7 +101,7 @@ describe ('LedController', () => {
     }
   });
 
-  it ('should be able to fill a single led', async () => {
+  it ('should be able to set a single led', async () => {
     const expectedLedColor = {
       red: 255,
       green: 155,
@@ -141,6 +146,112 @@ describe ('LedController', () => {
     actualBrightness = ledController.getBrightness();
 
     expect(actualBrightness).to.equal('auto');
+  });
+
+  it ('should be able to set the whole led strip', async() => {
+    const expectedLedColor = {
+      red: 255,
+      green: 155,
+      blue: 55,
+    };
+
+    const ledStripLength = ledController.getLedStrip().length;
+
+    let ledStripToSet = [];
+    for(let index = 0; index < ledStripLength; index++) {
+      ledStripToSet[index] = expectedLedColor;
+    }
+
+    await ledController.setLedStrip(ledStripToSet).show();
+
+    const ledStrip = ledController.getLedStrip();
+
+    for (let index = 0; index < ledStrip.length; index++) {
+
+      expect(ledStrip[index].red).to.equal(expectedLedColor.red);
+      expect(ledStrip[index].green).to.equal(expectedLedColor.green);
+      expect(ledStrip[index].blue).to.equal(expectedLedColor.blue);
+    }
+
+
+    await ledController.clearLeds().show();
+  });
+
+  it ('should throw an error if led strip to set is invalid', async() => {
+    const currentLedStrip = ledController.getLedStrip()
+    const ledStripLength = currentLedStrip.length;
+
+    let ledStripWithTooManyLeds = [];
+    for(let index = 0; index < ledStripLength + 1; index++) {
+      ledStripWithTooManyLeds[index] = {red: 255, blue: 0, green: 0};
+    }
+
+    let ledStripWithTooFewLeds = [];
+    for(let index = 0; index < ledStripLength - 1; index++) {
+      ledStripWithTooFewLeds[index] = {red: 255, blue: 0, green: 0};
+    }
+
+    let ledStripWithInvalidLedColor = currentLedStrip.slice();
+    ledStripWithInvalidLedColor[0].green = 256;
+
+    let ledStripWithMissingLedColor = currentLedStrip.slice();
+    ledStripWithMissingLedColor[1].blue = undefined;
+
+    let ledStripWithMissingLed = currentLedStrip.slice();
+    ledStripWithMissingLed[2] = undefined;
+
+    expect(ledController.setLedStrip.bind(ledController, ledStripWithTooManyLeds)).to.throw(`The led strip consists of ${ledStripLength} leds, but led colors that should be set consists of ${ledStripLength + 1} leds.`);
+    expect(ledController.setLedStrip.bind(ledController, ledStripWithTooFewLeds)).to.throw(`The led strip consists of ${ledStripLength} leds, but led colors that should be set consists of ${ledStripLength - 1} leds.`);
+
+    expect(ledController.setLedStrip.bind(ledController, ledStripWithInvalidLedColor)).to.throw(`Some led colors of the led strip are invalid. The following leds are invalid:\n`);
+    expect(ledController.setLedStrip.bind(ledController, ledStripWithMissingLedColor)).to.throw(`Some led colors of the led strip are invalid. The following leds are invalid:\n`);
+    expect(ledController.setLedStrip.bind(ledController, ledStripWithMissingLed)).to.throw(`Some led colors of the led strip are invalid. The following leds are invalid:\n`);
+
+
+    await ledController.clearLeds().show();
+  });
+
+
+  it ('should trigger led strip changed callback when led strip was changed', async() => {
+    const expectedLedColor = {
+      red: 255,
+      green: 155,
+      blue: 55,
+    };
+    const indexOfExpectedLed = Math.floor(Math.random() * 10);
+
+    let callbackWasTriggered = false;
+    const listenerId = ledController.onLedStripChanged((ledStrip) => {
+      callbackWasTriggered = true;
+
+      expect(ledStrip[indexOfExpectedLed].red).to.equal(expectedLedColor.red);
+      expect(ledStrip[indexOfExpectedLed].green).to.equal(expectedLedColor.green);
+      expect(ledStrip[indexOfExpectedLed].blue).to.equal(expectedLedColor.blue);
+    })
+
+    await ledController.setLed(indexOfExpectedLed, expectedLedColor).show();
+
+    expect(callbackWasTriggered).to.be.true;
+
+    ledController.removeEventListener(listenerId);
+  });
+
+  it ('should trigger brightness changed callback when brightness was changed', async() => {
+    const expectedBrightness = 75;
+
+    let callbackWasTriggered = false;
+
+    const listenerId = ledController.onBrightnessChanged((brightness) => {
+      callbackWasTriggered = true;
+
+      expect(brightness).to.equal(expectedBrightness);
+    })
+
+    await ledController.setBrightness(expectedBrightness).show();
+
+    expect(callbackWasTriggered).to.be.true;
+
+    ledController.removeEventListener(listenerId);
   });
 
   it ('should throw an error if the brightness value is invalid', async () => {

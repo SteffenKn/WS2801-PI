@@ -82,7 +82,7 @@
     "strict-boolean-expressions": false,
     "strict-type-predicates": false,
     "switch-default": true,
-    "triple-equals": true,
+    "triple-equals": false,
     "typeof-compare": true,
     "use-isnan": true,
 
