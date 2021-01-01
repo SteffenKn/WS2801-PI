@@ -96,7 +96,7 @@ describe ('LedController', () => {
     }
   });
 
-  it ('should be able to fill a single led', async () => {
+  it ('should be able to set a single led', async () => {
     const expectedLedColor = {
       red: 255,
       green: 155,

@@ -95,7 +95,7 @@ describe ('LedController', (): void => {
     }
   });
 
-  it ('should be able to fill a single led', async(): Promise<void> => {
+  it ('should be able to set a single led', async(): Promise<void> => {
     const expectedLedColor: LedColor = {
       red: 255,
       green: 155,
