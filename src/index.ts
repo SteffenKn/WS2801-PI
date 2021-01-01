@@ -68,7 +68,8 @@ export default class LedController {
       this.clockSpeed = config.spiClockSpeed ? config.spiClockSpeed : DEFAULT_CLOCK_SPEED;
     }
 
-    this.clearLeds().show();
+    this.clearLeds();
+    this.displayedLedStrip = this.undisplayedLedStrip;
   }
 
   public set clockSpeed(clockSpeed: ClockSpeed) {
