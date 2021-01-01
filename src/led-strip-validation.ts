@@ -9,6 +9,11 @@ export function validateLedStrip(amountOfLeds: number, ledStrip: LedStrip): void
   for (let ledIndex: number = 0; ledIndex < ledStrip.length; ledIndex++) {
     const ledColor: LedColor = ledStrip[ledIndex];
 
+    if (ledColor === undefined) {
+      invalidLedIndexes.push(ledIndex);
+      continue;
+    }
+
     if (ledColor.red == undefined || typeof ledColor.red !== 'number' || ledColor.red < 0 || ledColor.red > 255) {
       invalidLedIndexes.push(ledIndex);
     }
