@@ -202,7 +202,7 @@ export default class LedController {
   }
 
   public removeEventListener(id: string): void {
-    this.listeners[id] = undefined;
+    delete this.listeners[id];
   }
 
   private ledStripChanged(ledStrip: LedStrip): void {
