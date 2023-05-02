@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "npm run build:package && npm run build:tests",
+    "prepublish": "npm run build",
     "build:package": "tsc",
     "build:tests": "tsc --p tests/ts",
     "lint": "tslint --project .",
@@ -20,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/josefernanlo/WS2801-PI.git"
+    "url": "git+https://github.com/SteffenKn/WS2801-PI.git"
   },
   "keywords": [
     "WS2801",
