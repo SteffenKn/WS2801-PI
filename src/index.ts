@@ -49,7 +49,7 @@ export default class LedController {
   private ledAmount: number;
   private undisplayedLedStrip: LedStrip = [];
   private displayedLedStrip: LedStrip = [];
-  private brightness: number | 'auto' = 'auto';
+  private brightness: number = 100;
   private spiClockSpeed: ClockSpeed;
 
   private debug: boolean;
@@ -88,8 +88,8 @@ export default class LedController {
     return this.displayedLedStrip;
   }
 
-  public setLed(ledIndex: number, color: LedColor): LedController {
-    this.colorizeLed(ledIndex, color);
+  public setLed(ledIndex: number, color: LedColor, brightness: number = this.brightness): LedController {
+    this.colorizeLed(ledIndex, color, brightness);
 
     if (this.automaticRendering) {
       this.show();
@@ -100,7 +100,7 @@ export default class LedController {
 
   public fillLeds(color: LedColor): LedController {
     for (let ledIndex: number = 0; ledIndex < this.ledAmount; ledIndex++) {
-      this.colorizeLed(ledIndex, color);
+      this.colorizeLed(ledIndex, color, this.brightness);
     }
 
     if (this.automaticRendering) {
@@ -110,9 +110,9 @@ export default class LedController {
     return this;
   }
 
-  public setBrightness(brightness: number | 'auto'): LedController {
-    if ((typeof brightness !== 'number' && brightness !== 'auto') || brightness < 0 || brightness > 100) {
-      throw new Error(`The brightness must be between 0 and 100 or 'auto'.`);
+  public setBrightness(brightness: number): LedController {
+    if (typeof brightness !== 'number'|| brightness < 0 || brightness > 100) {
+      throw new Error(`The brightness must be between 0 and 100.`);
     }
 
     this.brightness = brightness;
@@ -141,7 +141,7 @@ export default class LedController {
     validateLedStrip(this.ledAmount, ledStrip);
 
     for (let ledIndex: number = 0; ledIndex < this.ledAmount; ledIndex++) {
-      this.colorizeLed(ledIndex, ledStrip[ledIndex]);
+      this.colorizeLed(ledIndex, ledStrip[ledIndex], this.brightness);
     }
 
     if (this.automaticRendering) {
@@ -223,14 +223,22 @@ export default class LedController {
     }
   }
 
-  private colorizeLed(ledNumber: number, color: LedColor): void {
-    const fixedColor: LedColor = {
-      red: Math.max(0, Math.min(color.red, 255)),
-      green: Math.max(0, Math.min(color.green, 255)),
-      blue: Math.max(0, Math.min(color.blue, 255)),
+  private colorizeLed(ledNumber: number, color: LedColor, brightness: number): void {
+    if (typeof brightness !== 'number' || brightness < 0 || brightness > 100) {
+      throw new Error(`The brightness must be between 0 and 100.`);
+    }
+    const brightnessMultiplier: number = brightness / 100 * 255;
+
+    const highestColorValue: number = this.getHighestColorValue(color);
+
+    const brightnessAdjustedColor: LedColor = {
+      red: Math.max(0, Math.min(color.red / highestColorValue * brightnessMultiplier, 255)),
+      green: Math.max(0, Math.min(color.green / highestColorValue * brightnessMultiplier, 255)),
+      blue: Math.max(0, Math.min(color.blue / highestColorValue * brightnessMultiplier, 255)),
     };
 
-    this.undisplayedLedStrip[ledNumber] = fixedColor;
+
+    this.undisplayedLedStrip[ledNumber] = brightnessAdjustedColor;
   }
 
   private getLedStripAsBuffer(ledStrip: LedStrip): Buffer {
@@ -249,9 +257,6 @@ export default class LedController {
   }
 
   private getBrightnessAdjustedColor(color: LedColor): LedColor {
-    if (this.brightness === 'auto') {
-      return color;
-    }
 
     const brightnessMultiplier: number = this.brightness / 100 * 255;
 
