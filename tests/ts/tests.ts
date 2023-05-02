@@ -138,10 +138,10 @@ describe ('LedController', (): void => {
 
     expect(actualBrightness).to.equal(brightnessToSet);
 
-    await ledController.setBrightness('auto').show();
+    await ledController.setBrightness(50).show();
     actualBrightness = ledController.getBrightness();
 
-    expect(actualBrightness).to.equal('auto');
+    expect(actualBrightness).to.equal(50);
   });
 
   it ('should be able to set the whole led strip', async(): Promise<void> => {
@@ -250,9 +250,8 @@ describe ('LedController', (): void => {
   });
 
   it ('should throw an error if the brightness value is invalid', () => {
-    expect(ledController.setBrightness.bind(ledController, -1)).to.throw(`The brightness must be between 0 and 100 or 'auto'.`);
-    expect(ledController.setBrightness.bind(ledController, 101)).to.throw(`The brightness must be between 0 and 100 or 'auto'.`);
-    expect(ledController.setBrightness.bind(ledController, 'aut')).to.throw(`The brightness must be between 0 and 100 or 'auto'.`);
+    expect(ledController.setBrightness.bind(ledController, -1)).to.throw(`The brightness must be between 0 and 100.`);
+    expect(ledController.setBrightness.bind(ledController, 101)).to.throw(`The brightness must be between 0 and 100.`);
   });
 
   it ('should be able to handle multiple changes at the same time', async(): Promise<void> => {
